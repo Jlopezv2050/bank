@@ -31,5 +31,5 @@ Access UI H2 Dashboard via: [H2 UI Login](http://localhost:8080/h2-ui/login.jsp)
 
 ## Services exposure
 
-Swagger
+<img src="swagger.png" width="340" height="290">
 
