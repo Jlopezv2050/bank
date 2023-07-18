@@ -50,7 +50,6 @@ public class AccountsService implements AccountsInputPort {
         }
     }
 
-
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public AccountResponse modifyBalance(String accountUuid, BigDecimal amount, MovementType movementType) {
         Account account = this.getByUuid(accountUuid);
@@ -64,10 +63,7 @@ public class AccountsService implements AccountsInputPort {
         return new AccountResponse(accountUuid,movement.getId(),amount,account.getBalance());
     }
 
-
-
     public AccountResponse transferToAccount(String accountUuid, String destinationUuid, BigDecimal amount) throws ObjectOptimisticLockingFailureException {
-
             Account originAccount = this.getByUuid(accountUuid);
             this.getByUuid(destinationUuid);
 

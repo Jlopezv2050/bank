@@ -4,7 +4,6 @@ import com.iobuilders.bank.domain.model.Movement;
 import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
-
 public class AccountDisplay {
     private String accountUuid;
     private BigDecimal balance;

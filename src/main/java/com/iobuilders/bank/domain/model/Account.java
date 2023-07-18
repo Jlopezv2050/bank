@@ -1,7 +1,6 @@
 package com.iobuilders.bank.domain.model;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.iobuilders.bank.domain.exception.NotEnoughFoundsException;
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OptimisticLockType;
@@ -27,7 +26,6 @@ public class Account {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Movement> movementList;
-
 
     public Account(User user) {
         this.uuid = "account-" + UUID.randomUUID();
@@ -75,7 +73,14 @@ public class Account {
     }
 
     public void withdraw(BigDecimal amount) {
+        validateEnoughFounds(amount);
         this.balance = balance.subtract(amount);
+    }
+
+    private void validateEnoughFounds(BigDecimal amount) {
+        if ((balance.subtract(amount)).compareTo(BigDecimal.ZERO) < 0) {
+            throw new NotEnoughFoundsException(this.uuid);
+        }
     }
 
 }

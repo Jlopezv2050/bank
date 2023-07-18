@@ -12,7 +12,6 @@ import java.util.List;
 public interface MovementsInputPort {
     Movement addMovementByAccount(Account account_uuid, MovementType movementType, BigDecimal amount);
     Page<Movement> getAllMovements(Pageable pageable);
-
     List<Movement> getAll();
 
     }

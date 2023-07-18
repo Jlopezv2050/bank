@@ -3,7 +3,6 @@ package com.iobuilders.bank.infrastructure.adapters.input.rest;
 import com.iobuilders.bank.application.exceptions.AccountNotfoundExceptions;
 import com.iobuilders.bank.application.exceptions.AlreadyCreatedUser;
 import com.iobuilders.bank.application.exceptions.UserNotfoundExceptions;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
