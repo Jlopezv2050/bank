@@ -41,7 +41,7 @@ public class AccountsServiceLockTest {
 
 
     @Test
-    void given_savings_when_updated_user_in_a_concurrent_way_then_version_is_incremented() throws InterruptedException {
+    void givenUuidAndAmountAndMovementType_whenModifyBalanceConcurrent_thenModifyCorrect() throws InterruptedException {
 
         User user = new User("test");
         usersRepository.save(user);
@@ -69,7 +69,7 @@ public class AccountsServiceLockTest {
     }
 
     @Test
-    void given_savings_when_updated_user_in_a_concurrent_way_then_version_is_incremented2() throws InterruptedException {
+    void givenAccountUuidOriginDestinationAndAmount_whenTransferToAccountInThread_thenTransferCorrect() throws InterruptedException {
 
         User user = new User("test2");
         usersRepository.save(user);
@@ -105,7 +105,5 @@ public class AccountsServiceLockTest {
         Assertions.assertEquals(new BigDecimal("20.00"),
                 accountsRepository.findByUuid(account.getUuid()).get().getBalance());
     }
-
-
 
 }

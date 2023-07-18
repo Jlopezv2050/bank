@@ -1,9 +1,12 @@
 package com.iobuilders.bank.application.useCases;
 
+import com.iobuilders.bank.application.exceptions.AccountNotfoundExceptions;
 import com.iobuilders.bank.domain.model.Account;
 import com.iobuilders.bank.domain.model.Movement;
+import com.iobuilders.bank.domain.model.MovementType;
 import com.iobuilders.bank.domain.ports.input.MovementsInputPort;
 import com.iobuilders.bank.infrastructure.adapters.input.rest.AccountDisplay;
+import com.iobuilders.bank.infrastructure.adapters.input.rest.AccountResponse;
 import com.iobuilders.bank.infrastructure.adapters.output.AccountsRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class AccountsServiceTest {
@@ -34,7 +38,6 @@ public class AccountsServiceTest {
     void setUp() {
      MockitoAnnotations.openMocks(this);
     }
-
     @Test
     void givenAccountUuid_whenGetAccountDisplay_thenReturnAccountDisplay (){
 
@@ -59,7 +62,28 @@ public class AccountsServiceTest {
         Assertions.assertEquals(3,accountDisplay.getMovementList().getSize());
     }
 
+    @Test
+    void givenWrongAccountUuid_whenGetByUuid_thenThrowsException(){
+        Mockito.when(accountsRepository.findByUuid(ArgumentMatchers.anyString())).thenThrow(AccountNotfoundExceptions.class);
+        Assertions.assertThrows(AccountNotfoundExceptions.class,() -> accountsService.getByUuid(""));
+    }
 
+    @Test
+    void givenAccountUuidAndAmountAndMovementType_whenModifyBalance_thenReturnAccountResponse() {
+        Account account = Mockito.spy(new Account());
+        account.setUuid(UUID.randomUUID().toString());
+        account.setBalance(BigDecimal.TEN);
+        Movement movement = new Movement();
+        Mockito.doReturn(account).when(accountsService).getByUuid(ArgumentMatchers.anyString());
+        Mockito.doReturn(account).when(accountsRepository).save(ArgumentMatchers.any(Account.class));
+        Mockito.doReturn(movement).when(movementsInputPort).addMovementByAccount(
+                ArgumentMatchers.any(Account.class),
+                ArgumentMatchers.any(MovementType.class),
+                ArgumentMatchers.any(BigDecimal.class));
 
+        AccountResponse accountResponse = accountsService.modifyBalance(account.getUuid(), BigDecimal.TWO, MovementType.WITHDRAW);
+        Mockito.verify(account).withdraw(ArgumentMatchers.any());
+        Assertions.assertEquals(account.getUuid(), accountResponse.getUuid());
+     }
 
 }

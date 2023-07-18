@@ -2,7 +2,6 @@ package com.iobuilders.bank.domain.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -29,6 +28,7 @@ public class Movement {
         this.movementType = movementType;
         this.amount = amount;
     }
+
     public Movement() {
     }
 
@@ -63,4 +63,5 @@ public class Movement {
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
+
 }

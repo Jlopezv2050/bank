@@ -15,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsersService implements UsersInputPort {
     UsersRepository usersRepository;
     AccountsInputPort accountsService;
-    public UsersService(UsersRepository usersRepository, AccountsInputPort accountsService){
+
+    public UsersService(UsersRepository usersRepository, AccountsInputPort accountsService) {
         this.usersRepository = usersRepository;
         this.accountsService = accountsService;
     }
@@ -28,9 +29,9 @@ public class UsersService implements UsersInputPort {
     @Override
     @Transactional
     public UserInfo create(UserRequest userRequest) {
-        User user;
+        User user = new User(userRequest.getName());
         try {
-            user = usersRepository.saveAndFlush(new User(userRequest.getName()));
+            user = usersRepository.saveAndFlush(user);
         } catch (DataIntegrityViolationException die) {
             throw new AlreadyCreatedUser(userRequest.getName());
         }
